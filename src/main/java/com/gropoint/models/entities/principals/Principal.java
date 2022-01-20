@@ -25,8 +25,12 @@ public class Principal implements Serializable {
     private Long id;
 
     @NotEmpty(message = "Name principal is required!")
-    @Column(name = "name_principal", nullable = false, length = 15)
+    @Column(name = "name_principal", nullable = false, length = 30)
     private String namePrincipal;
+
+    @NotEmpty(message = "Username is required!")
+    @Column(name = "username", nullable = false)
+    private String username;
 
     @NotEmpty(message = "Password is required!")
     @Column(name = "password", nullable = false, length = 1000)

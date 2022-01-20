@@ -19,6 +19,6 @@ public interface RoleRepos extends JpaRepository<Role, Long> {
     @Query(value = "SELECT id, role_name FROM role WHERE deleted = false",nativeQuery = true)
     List<CustomField.getRole> allRoles();
 
-    @Query(value = "SELECT id, role_name FROM role WHERE deleted = false AND id=:id",nativeQuery = true)
+    @Query(value = "SELECT role_name FROM role WHERE deleted = false AND id=:id",nativeQuery = true)
     CustomField.getRole roleByID(Long id);
 }
