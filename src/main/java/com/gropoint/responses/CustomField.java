@@ -30,4 +30,9 @@ public interface CustomField {
         public String getname_warehouse();
     }
 
+    public interface getCategory{
+        public Long getid();
+        public String getname_category();
+    }
+
 }
