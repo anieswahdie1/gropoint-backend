@@ -1,6 +1,7 @@
 package com.gropoint.controllers.principals;
 
 import com.gropoint.dto.ProductDTO;
+import com.gropoint.dto.TransactionDTO;
 import com.gropoint.models.entities.principals.Product;
 import com.gropoint.responses.CommonResponse;
 import com.gropoint.services.principals.ProductService;
@@ -53,6 +54,11 @@ public class ProductController {
     @GetMapping("/product/dropdown")
     public ResponseEntity<CommonResponse> getProductDropdown(){
         return productService.findProductDropdown();
+    }
+
+    @PostMapping("/product/point")
+    public ResponseEntity<CommonResponse> getPoint(@RequestBody TransactionDTO payload){
+        return productService.claimPoint(payload);
     }
 
 }

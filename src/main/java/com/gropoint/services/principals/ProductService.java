@@ -1,8 +1,15 @@
 package com.gropoint.services.principals;
 
 import com.gropoint.dto.ProductDTO;
+import com.gropoint.dto.TransactionDTO;
+import com.gropoint.models.entities.customers.Member;
+import com.gropoint.models.entities.customers.Transaction;
 import com.gropoint.models.entities.principals.Product;
+import com.gropoint.models.entities.principals.Program;
+import com.gropoint.models.repositories.customers.MemberRepos;
+import com.gropoint.models.repositories.customers.TransactionRepos;
 import com.gropoint.models.repositories.principals.ProductRepos;
+import com.gropoint.models.repositories.principals.ProgramRepos;
 import com.gropoint.responses.CommonResponse;
 import com.gropoint.responses.CustomField;
 import com.gropoint.responses.ResponseGenerator;
@@ -20,6 +27,15 @@ import java.util.Optional;
 public class ProductService {
     @Autowired
     private ProductRepos productRepos;
+
+    @Autowired
+    private ProgramRepos programRepos;
+
+    @Autowired
+    private MemberRepos memberRepos;
+
+    @Autowired
+    private TransactionRepos transactionRepos;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -94,39 +110,39 @@ public class ProductService {
                         "Success"));
     }
 
-//    public ResponseEntity<CommonResponse> claimPoint(TransactionDto payload){
-//        Optional<Product> prod = productRepository.findById(payload.getProduct().getId());
-//
-//        if (prod.isPresent()){
-//            Transaction prodTrans = modelMapper.map(payload, Transaction.class);
-//            Optional<Program> program = programRepository.findById(prod.get().getProgram().getId());
-//            Optional<Member> member = memberRepository.findById(payload.getMember().getIdMember());
-//
-//            Double totalAmount = prod.get().getPrice() * payload.getQtyProduct();
-//
-//            prodTrans.setProduct(payload.getProduct());
-//            prodTrans.setMember(payload.getMember());
-//            prodTrans.setQtyProduct(payload.getQtyProduct());
-//            prodTrans.setPayAmount(prod.get().getPrice() * payload.getQtyProduct());
-//
-//            if (totalAmount >= program.get().getAmountTransaction()){
-//                if (program.get().isMultiple() == true){
-//                    Double calcAmount = Math.floor(prodTrans.getPayAmount()/program.get().getAmountTransaction());
-//                    Double claimPoint = calcAmount*program.get().getPoint();
-//                    int point = claimPoint.intValue();
-//                    memberRepository.updatePoint(member.get().getPoint()+point,payload.getMember().getIdMember());
-//                } else {
-//                    int claimPoint = program.get().getPoint();
-//                    memberRepository.updatePoint(member.get().getPoint()+claimPoint,payload.getMember().getIdMember());
-//                }
-//            }
-//            return ResponseEntity.status(HttpStatus.OK)
-//                    .body(commonResponseGenerator.responseSuccess(transactionRepo.save(prodTrans),
-//                            "Transaction success."));
-//        } else {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                    .body(commonResponseGenerator.responseFailed("Failed."));
-//        }
-//    }
+    public ResponseEntity<CommonResponse> claimPoint(TransactionDTO payload){
+        Optional<Product> prod = productRepos.findById(payload.getProduct().getId());
+
+        if (prod.isPresent()){
+            Transaction prodTrans = modelMapper.map(payload, Transaction.class);
+            Optional<Program> program = programRepos.findById(prod.get().getProgram().getId());
+            Optional<Member> member = memberRepos.findById(payload.getMember().getIdMember());
+
+            Double totalAmount = prod.get().getPrice() * payload.getQtyProduct();
+
+            prodTrans.setProduct(payload.getProduct());
+            prodTrans.setMember(payload.getMember());
+            prodTrans.setQtyProduct(payload.getQtyProduct());
+            prodTrans.setPayAmount(prod.get().getPrice() * payload.getQtyProduct());
+
+            if (totalAmount >= program.get().getAmountTransaction()){
+                if (program.get().isMultiple() == true){
+                    Double calcAmount = Math.floor(prodTrans.getPayAmount()/program.get().getAmountTransaction());
+                    Double claimPoint = calcAmount*program.get().getPoint();
+                    int point = claimPoint.intValue();
+                    memberRepos.updatePoint(member.get().getPoint()+point,payload.getMember().getIdMember());
+                } else {
+                    int claimPoint = program.get().getPoint();
+                    memberRepos.updatePoint(member.get().getPoint()+claimPoint,payload.getMember().getIdMember());
+                }
+            }
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(responseGenerator.success(transactionRepos.save(prodTrans),
+                            "Transaction success."));
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(responseGenerator.failed("Failed."));
+        }
+    }
 
 }
