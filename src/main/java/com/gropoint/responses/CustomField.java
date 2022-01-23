@@ -35,4 +35,70 @@ public interface CustomField {
         public String getname_category();
     }
 
+    public interface  getProduct {
+        public Long getid();
+        public String getid_product();
+        public String getname_product();
+        public String getname_category();
+        public int getqty_stock();
+        public int getcurr_stock();
+        public Long getprogram_id();
+        public int getprincipal_id();
+        public Long getwarehouse_id();
+        public Long getcategory_id();
+        public String getname_principal();
+        public String getname_warehouse();
+        public String getcreated_date();
+        public String getupdated_date();
+        public int getprice();
+    }
+
+    public interface getProductByCategory{
+        public Long getid();
+        public String getid_product();
+        public String getname_product();
+        public int getcurr_stock();
+        public int getqty_stock();
+        public String getname_category();
+        public String getname_warehouse();
+    }
+
+    public interface getProductDropdown{
+        public Long getid();
+        public String getname_product();
+    }
+
+    public interface getProductById{
+        public Long getid();
+        public String getid_product();
+        public String getname_product();
+        public int getcurr_stock();
+        public Long getcategory_id();
+        public Long getprincipal_id();
+        public Long getwarehouse_id();
+        public Long getprogram_id();
+        public String getcreated_date();
+        public String getupdated_date();
+        public boolean getdeleted();
+    }
+
+    public interface getProgram{
+        public Long getid();
+        public String getid_program();
+        public String getname_program();
+        public int getpoint();
+        public int getamount_transaction();
+        public int getamount_usage();
+        public String getdescription();
+        public String getduration();
+        public boolean getmultiple();
+        public boolean getrepeats();
+        public String getstart_date();
+        public String getend_date();
+        public String getstatus();
+        public String getcreated_date();
+        public String getupdated_date();
+        public Long getproduct_id();
+    }
+
 }
