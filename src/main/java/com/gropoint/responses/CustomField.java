@@ -127,4 +127,15 @@ public interface CustomField {
         public String getstatus();
     }
 
+    public interface getPassword{
+        public String getpassword();
+    }
+
+    public interface getLogin{
+        public Long getid();
+        public String getusername();
+        public String getprincipal_name();
+        public int getrole_id();
+    }
+
 }

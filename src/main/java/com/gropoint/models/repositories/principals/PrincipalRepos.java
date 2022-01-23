@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PrincipalRepos extends JpaRepository<Principal, Long> {
@@ -26,4 +27,17 @@ public interface PrincipalRepos extends JpaRepository<Principal, Long> {
 
     @Query(value = "SELECT id, username, name_principal, role_id FROM principal WHERE deleted = false AND id=:id",nativeQuery = true)
     CustomField.getPrincipal getOnePrincipal(Long id);
+
+    @Query(value = "SELECT id, principal_name, username, role_id " +
+            "FROM principal " +
+            "WHERE username = ?1 AND password=?2",nativeQuery = true)
+    Optional<CustomField.getLogin> getDataByUsrPass(String username, boolean password);
+
+    @Query(value = "SELECT id, principal_name, username, role_id " +
+            "FROM principal " +
+            "WHERE username = ?1",nativeQuery = true)
+    Optional<CustomField.getLogin> getDataByUsr(String username);
+
+    @Query(value = "select password from principal where username = ?1",nativeQuery = true)
+    Optional<CustomField.getPassword> getPasswordByUsername(String username);
 }

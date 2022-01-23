@@ -1,12 +1,15 @@
 package com.gropoint.services.principals;
 
 import com.gropoint.dto.ClaimRewardDTO;
+import com.gropoint.dto.ReturnRwdDTO;
 import com.gropoint.dto.RewardDTO;
 import com.gropoint.models.entities.customers.ClaimReward;
 import com.gropoint.models.entities.customers.Member;
+import com.gropoint.models.entities.customers.ReturnReward;
 import com.gropoint.models.entities.principals.Reward;
 import com.gropoint.models.repositories.customers.ClaimRewardRepos;
 import com.gropoint.models.repositories.customers.MemberRepos;
+import com.gropoint.models.repositories.customers.ReturnRewardRepos;
 import com.gropoint.models.repositories.principals.RewardRepos;
 import com.gropoint.responses.CommonResponse;
 import com.gropoint.responses.CustomField;
@@ -31,8 +34,8 @@ public class RewardService {
     @Autowired
     private MemberRepos memberRepository;
 
-//    @Autowired
-//    private ReturnRepository returnRepository;
+    @Autowired
+    private ReturnRewardRepos returnRepository;
 
     @Autowired
     private ClaimRewardRepos claimRewardRepository;
@@ -101,4 +104,22 @@ public class RewardService {
                     .body(responseGenerator.failed("Failed."));
         }
     }
+
+    public ResponseEntity<CommonResponse> returnRwd(ReturnRwdDTO payload){
+        Optional<ClaimReward> claimReward = claimRewardRepository.findById(payload.getClaimReward());
+        Optional<Member> member = memberRepository.findById(payload.getMember());
+
+        Timestamp dateNow = new Timestamp(System.currentTimeMillis());
+        ReturnReward currReturn = modelMapper.map(payload,ReturnReward.class);
+        currReturn.setReturnDate(dateNow);
+        currReturn.setStatus("requested");
+        claimRewardRepository.updateStatus("returned", payload.getClaimReward());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(responseGenerator.success(
+                        returnRepository.saveNewReturn(currReturn.getReturnDate(), currReturn.getStatus(),
+                                payload.getClaimReward(),payload.getMember()),
+                        "Sucess add new return."));
+    }
+
 }

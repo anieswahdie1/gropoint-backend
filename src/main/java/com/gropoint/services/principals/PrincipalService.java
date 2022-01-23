@@ -1,5 +1,6 @@
 package com.gropoint.services.principals;
 
+import com.gropoint.dto.LoginDTO;
 import com.gropoint.dto.PrincipalDTO;
 import com.gropoint.models.entities.principals.Principal;
 import com.gropoint.models.repositories.principals.PrincipalRepos;
@@ -115,6 +116,26 @@ public class PrincipalService {
 
     public void delete(Long id){
         principalRepos.deleteById(id);
+    }
+
+    public ResponseEntity<CommonResponse> findDataByUsername(LoginDTO payload){
+        Optional<CustomField.getPassword> passwordDb = principalRepos.getPasswordByUsername(payload.getUsername());
+
+        if (!passwordDb.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(responseGenerator.notFound("Not data principal by this username."));
+        } else {
+            CustomField.getPassword password = passwordDb.get();
+            if (passwordEncoder.matches(payload.getPassword(), password.getpassword())) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(responseGenerator.success(
+                                principalRepos.getDataByUsr(payload.getUsername()).get(),
+                                "Login succes."));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(responseGenerator.failed("Login Failed! Password doesnt match."));
+            }
+        }
     }
 
 }

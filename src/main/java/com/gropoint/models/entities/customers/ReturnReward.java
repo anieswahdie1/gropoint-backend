@@ -1,0 +1,33 @@
+package com.gropoint.models.entities.customers;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "return_reward")
+public class ReturnReward implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne
+    private ClaimReward claimReward;
+
+    @ManyToOne
+    private Member member;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date returnDate;
+
+    private String status;
+}

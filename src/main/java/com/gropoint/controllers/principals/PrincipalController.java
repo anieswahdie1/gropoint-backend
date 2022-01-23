@@ -1,5 +1,6 @@
 package com.gropoint.controllers.principals;
 
+import com.gropoint.dto.LoginDTO;
 import com.gropoint.dto.PrincipalDTO;
 import com.gropoint.responses.CommonResponse;
 import com.gropoint.services.principals.PrincipalService;
@@ -37,4 +38,10 @@ public class PrincipalController {
     public void deletePrincipalByID(@PathVariable("id") Long id){
         principalService.delete(id);
     }
+
+    @PostMapping("/auth/login")
+    public ResponseEntity<CommonResponse> login(@RequestBody LoginDTO payload){
+        return principalService.findDataByUsername(payload);
+    }
+
 }
