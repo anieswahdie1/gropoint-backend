@@ -1,5 +1,7 @@
 package com.gropoint.responses;
 
+import java.util.Date;
+
 public interface CustomField {
 
     public interface getRole{
@@ -99,6 +101,30 @@ public interface CustomField {
         public String getcreated_date();
         public String getupdated_date();
         public Long getproduct_id();
+    }
+
+    public interface getReward{
+        public Long getid();
+        public String getid_reward();
+        public String getreward_code();
+        public String getreward_name();
+        public int getredeem_point();
+        public String getduration();
+        public int getbudget_stock();
+        public String getstart_date();
+        public String getend_date();
+        public String getinfo();
+        public String getterm_condition();
+        public Long getcategory_id();
+        public String getname_category();
+        public Long getmerchant_id();
+        public String getname_merchant();
+        public int getprincipal_id();
+        public Long getproduct_id();
+        public String getname_product();
+        public Date getcreated_date();
+        public Date getupdated_date();
+        public String getstatus();
     }
 
 }
