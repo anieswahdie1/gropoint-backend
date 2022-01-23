@@ -21,4 +21,12 @@ public class ResponseGenerator<T> {
 
         return commonResponse;
     }
+
+    public <T> CommonResponse<T> notFound(String message){
+        CommonResponse commonResponse = new CommonResponse();
+        commonResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        commonResponse.setMessage(message);
+
+        return commonResponse;
+    }
 }

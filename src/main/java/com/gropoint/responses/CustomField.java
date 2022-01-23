@@ -24,4 +24,10 @@ public interface CustomField {
         public Long getprincipal_id();
     }
 
+    public interface getWarehouse{
+        public Long getid();
+        public String getid_warehouse();
+        public String getname_warehouse();
+    }
+
 }

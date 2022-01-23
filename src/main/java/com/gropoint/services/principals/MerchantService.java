@@ -30,29 +30,32 @@ public class MerchantService {
     private ResponseGenerator responseGenerator;
 
     public ResponseEntity<CommonResponse> saveMerchant(MerchantDTO payload){
-        Optional<Merchant> merchant = merchantRepos.findById(payload.getId());
-        Merchant currMerchant = modelMapper.map(payload,Merchant.class);
+        Merchant merchant = modelMapper.map(payload,Merchant.class);
 
-        if (merchant.get().getId() != null){
-            currMerchant.setIdMerchant(payload.getIdMerchant());
-            currMerchant.setNameMerchant(payload.getNameMerchant());
-            currMerchant.setNameCity(payload.getNameCity());
-            currMerchant.setLattitude(payload.getLattitude());
-            currMerchant.setLongitude(payload.getLongitude());
+        if (merchant.getId() != null){
+            merchant.setNameMerchant(payload.getNameMerchant());
+            merchant.setNameCity(payload.getNameCity());
+            merchant.setLattitude(payload.getLattitude());
+            merchant.setLongitude(payload.getLongitude());
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body(responseGenerator.success(
-                            merchantRepos.updateMerchant(currMerchant.getNameMerchant(), currMerchant.getNameCity(),
-                                    currMerchant.getLattitude(), currMerchant.getLongitude(), merchant.get().getId()),
+                            merchantRepos.updateMerchant(merchant.getNameMerchant(), merchant.getNameCity(),
+                                    merchant.getLattitude(), merchant.getLongitude(), merchant.getId()),
                             "Success update merchant by ID."
                     ));
         } else {
-            currMerchant.setDeleted(false);
+            merchant.setIdMerchant(payload.getIdMerchant());
+            merchant.setNameMerchant(payload.getNameMerchant());
+            merchant.setNameCity(payload.getNameCity());
+            merchant.setLattitude(payload.getLattitude());
+            merchant.setLongitude(payload.getLongitude());
+            merchant.setDeleted(false);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(responseGenerator.success(
-                            merchantRepos.saveMerchant(payload.getIdMerchant(), payload.getNameMerchant(),
-                                    payload.getNameCity(), payload.getLattitude(), payload.getLongitude(),
-                                    payload.getPrincipal(), currMerchant.isDeleted()),
+                            merchantRepos.saveMerchant(merchant.getIdMerchant(), merchant.getNameMerchant(),
+                                    merchant.getNameCity(), merchant.getLattitude(), merchant.getLongitude(),
+                                    payload.getPrincipal(), merchant.isDeleted()),
                             "Success add new merchant."
                     ));
         }
@@ -64,8 +67,8 @@ public class MerchantService {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(responseGenerator.success(merchant,"Success get merchant by ID."));
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(responseGenerator.failed("Merchant with id is doest exist."));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(responseGenerator.notFound("Merchant with id is not found."));
         }
     }
 
@@ -76,8 +79,8 @@ public class MerchantService {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(responseGenerator.success(merchants,"Success get merchants by Principal id"));
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(responseGenerator.failed("Merchant by principal ID is doesnt exist."));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(responseGenerator.notFound("Merchant by principal ID is not found."));
         }
     }
 
