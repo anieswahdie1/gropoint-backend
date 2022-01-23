@@ -1,5 +1,6 @@
 package com.gropoint.controllers.principals;
 
+import com.gropoint.dto.ClaimRewardDTO;
 import com.gropoint.dto.RewardDTO;
 import com.gropoint.models.entities.principals.Reward;
 import com.gropoint.responses.CommonResponse;
@@ -37,5 +38,10 @@ public class RewardController {
     @GetMapping("/reward/principal/{id}")
     public ResponseEntity<CommonResponse> getRewardByPrincipalId(@PathVariable("id") Long id){
         return rewardService.findRewardByPrincipalId(id);
+    }
+
+    @PostMapping("/reward/claim")
+    public ResponseEntity<CommonResponse> getReward(@RequestBody ClaimRewardDTO payload){
+        return rewardService.claimReward(payload);
     }
 }
